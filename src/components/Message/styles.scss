@@ -1,0 +1,32 @@
+.message {
+  display: flex;
+  align-items: stretch;
+
+  .message-text {
+    border-radius: 10px;
+    padding: 5px;
+
+    background-color: lightblue;
+    color: white;
+
+    &.other-party {
+      background-color: lightgray;
+      color: black;
+    }
+  }
+
+  .color-circle {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+
+    position: relative;
+    top: 100%;
+    transform: translateY(calc(-100% + 5px));
+  }
+
+  .username {
+    margin-bottom: 10px;
+    margin-left: px;
+  }
+}

@@ -1,15 +1,44 @@
 import React from 'react';
 import { CirclePicker } from 'react-color';
 
+import { ChatEvents } from '../ChatEvents';
+
 import './styles.scss';
 
 const ChatPage = () => {
 
   const getChatView = () => {
+    const chatEvents = [
+      {
+        type: "announcement",
+        text: "You joined the chat."
+      },
+      {
+        type: "message",
+        text: "idk man"
+      },
+      {
+        type: "message",
+        name: "Luigi",
+        color: "#aa55bb",
+        text: "Why is the chat moving upwards?"
+      },
+      {
+        type: "message",
+        text: "ikr"
+      },
+      {
+        type: "message",
+        name: "Big Chungus",
+        color: "#11ddcc",
+        text: "Based and redpilled"
+      }
+    ];
+
     return (
       <div className="chat-view">
         <div className="chat-section-container">
-
+          <ChatEvents data={chatEvents} />
         </div>
         <div className="member-list-container">
         </div>
@@ -39,8 +68,8 @@ const ChatPage = () => {
 
   return (
     <div className="chat-page">
-      {getSignInView()}
-      {/* {getChatView()} */}
+      {/* {getSignInView()} */}
+      {getChatView()}
     </div>
   );
 };
