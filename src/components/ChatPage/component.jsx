@@ -3,6 +3,7 @@ import { CirclePicker } from 'react-color';
 
 import { ChatEvents } from '../ChatEvents';
 import { ChatMessageCompose } from '../ChatMessageCompose';
+import { MemberList } from '../MemberList';
 
 import './styles.scss';
 
@@ -70,14 +71,23 @@ const ChatPage = () => {
       },
     ];
 
+    const chatMembers = [
+      { name: "John Cena", color: "red" },
+      { name: "Luigi", color: "#aa55bb" },
+      { name: "Big Chungus", color: "#11ddcc" }
+    ];
+
     return (
       <div className="chat-view">
         <div className="chat-section-container">
-          <h1>Chat - 5 members</h1>
-          <ChatEvents data={chatEvents} />
-          <ChatMessageCompose />
+          <div className="flex-container">
+            <h1>Chat - 5 members</h1>
+            <ChatEvents data={chatEvents} />
+            <ChatMessageCompose />
+          </div>
         </div>
         <div className="member-list-container">
+          <MemberList data={chatMembers} />
         </div>
       </div>
     );
