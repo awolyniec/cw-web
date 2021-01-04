@@ -1,14 +1,15 @@
+@import '../../styles/variables';
+
 .message {
   display: flex;
   align-items: stretch;
 
-  .message-text {
+  .message-text-container {
     border-radius: 10px;
     padding: 5px;
-
-    background-color: lightblue;
+    background-color: $facebook-blue;
     color: white;
-
+  
     &.other-party {
       background-color: lightgray;
       color: black;

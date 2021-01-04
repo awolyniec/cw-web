@@ -1,0 +1,26 @@
+.chat-events {
+  overflow-y: scroll;
+  padding: 0.5rem 0 0.5rem 0;
+
+  .row {
+    padding: 0.5rem;
+  }
+
+  .announcement-container {
+    text-align: center;
+  }
+
+  .chat-event-container {
+    &.chat-message {
+      max-width: 65%;
+    }
+
+    &.self-message {
+      float: right;
+    }
+
+    &.other-message {
+      float: left;
+    }
+  }
+}

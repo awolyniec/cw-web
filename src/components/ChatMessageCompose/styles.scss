@@ -1,0 +1,18 @@
+@import '../../styles/variables';
+
+.chat-message-compose {
+  display: flex;
+  
+  textarea {
+    width: 100%;
+    resize: none;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  .send-button {
+    background-color: $facebook-blue;
+    color: white;
+    width: 48px;
+  }
+}

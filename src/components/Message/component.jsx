@@ -17,8 +17,8 @@ const Message = ({ name, color, text }) => {
             <span>{name}</span>
           </div>
         )}
-        <div>
-          <span className={classname("message-text", { "other-party": name })}>{text}</span>
+        <div className={classname("message-text-container",  { "other-party": name })}>
+          <span className="message-text">{text}</span>
         </div>
       </div>
     </div>
