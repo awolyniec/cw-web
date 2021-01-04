@@ -81,7 +81,7 @@ const ChatPage = () => {
       <div className="chat-view">
         <div className="chat-section-container">
           <div className="flex-container">
-            <h1>Chat - 5 members</h1>
+            <h1>Chat - 3 members</h1>
             <ChatEvents data={chatEvents} />
             <ChatMessageCompose />
           </div>
