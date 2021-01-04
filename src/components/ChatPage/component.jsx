@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CirclePicker } from 'react-color';
 
 import { ChatEvents } from '../ChatEvents';
@@ -7,7 +7,75 @@ import { MemberList } from '../MemberList';
 
 import './styles.scss';
 
+
+/*
+  TODO: WebSocket stuff
+  - Load initial users
+  - Load initial messages
+  - Load new user
+    - Don't let it be the same as self user
+  - Load new message
+  - Remove user
+  - Sign in
+  - Sign out
+*/
 const ChatPage = () => {
+
+  const [name, setName] = useState(null);
+  const [color, setColor] = useState(null);
+  const [selfUser, setSelfUser] = useState(null);
+  const [otherUsers, setOtherUsers] = useState([]);
+  const [chatEvents, setChatEvents] = useState([]);
+  const [signInErrors, setSignInErrors] = useState([]);
+
+  /*
+    Helper functions
+  */
+
+  const handleChangeName = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setName(event.target.value);
+  };
+
+  const handleChangeColor = (color, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setColor(color.hex);
+  };
+
+  const validateSignInInfo = () => {
+    const errors = [];
+    if (!name) {
+      errors.push("Please select a name.");
+    }
+    const otherUserNames = otherUsers.map(({ name }) => name);
+    if (otherUserNames.indexOf(name) > -1) {
+      errors.push("Name already taken.");
+    }
+    if (!color) {
+      errors.push("Please select a color.");
+    }
+
+    return { validity: !errors.length, errors };
+  };
+
+  const signIn = () => {
+    const { validity, errors } = validateSignInInfo();
+    if (!validity) {
+      setSignInErrors(errors);
+      return;
+    }
+    setSignInErrors([]);
+
+    // TODO: publish new user event
+    // TODO: only set self user once user created on server
+    setSelfUser({ name, color });
+  };
+
+  /*
+    Renderers
+  */
 
   const getChatView = () => {
     const chatEvents = [
@@ -71,17 +139,21 @@ const ChatPage = () => {
       },
     ];
 
-    const chatMembers = [
-      { name: "John Cena", color: "red", isSelf: true },
-      { name: "Luigi", color: "#aa55bb" },
-      { name: "Big Chungus", color: "#11ddcc" }
-    ];
+    const chatMembers = Array.from(otherUsers);
+    if (selfUser) {
+      chatMembers.push({
+        ...selfUser,
+        isSelf: true
+      });
+    }
+
+    const memberOrMembersText = chatMembers.length === 1 ? '' : 's';
 
     return (
       <div className="chat-view">
         <div className="chat-section-container">
           <div className="flex-container">
-            <h1>Chat - 3 members</h1>
+            <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
             <ChatEvents data={chatEvents} />
             <ChatMessageCompose />
           </div>
@@ -100,14 +172,36 @@ const ChatPage = () => {
         <div className="sign-in-form">
           <h1>Welcome to ChattyWatty</h1>
           <span className="input-label">Enter your name:</span>
-          <input className="name-input" type="text" />
+          <input
+            className="name-input"
+            type="text"
+            onChange={handleChangeName}
+          />
           <span className="input-label">Pick your color:</span>
           <div className="circle-picker-container">
-            <CirclePicker width={"400px"} />
+            <CirclePicker
+              width={"400px"}
+              onChangeComplete={handleChangeColor}
+            />
           </div>
           <div>
-            <button className="chat-enter-button" type="button">Enter Chat</button>
+            <button
+              className="chat-enter-button"
+              type="button"
+              onClick={signIn}
+            >
+              Enter Chat
+            </button>
           </div>
+          {signInErrors.length ? (
+            signInErrors.map((errorMessage, index) => {
+              return (
+                <div key={`error-${index}`}>
+                  <span style={{ color: "red" }}>{errorMessage}</span>
+                </div>
+              );
+            })
+          ) : (<></>)}
         </div>
       </div>
     );
@@ -115,8 +209,7 @@ const ChatPage = () => {
 
   return (
     <div className="chat-page">
-      {/* {getSignInView()} */}
-      {getChatView()}
+      {selfUser ? getChatView() : getSignInView()}
     </div>
   );
 };
