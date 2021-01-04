@@ -7,10 +7,70 @@ import { MemberList } from '../MemberList';
 
 import './styles.scss';
 
+// const chatEvents = [
+//   {
+//     type: "announcement",
+//     text: "You joined the chat."
+//   },
+//   {
+//     type: "message",
+//     text: "idk man"
+//   },
+//   {
+//     type: "message",
+//     name: "Luigi",
+//     color: "#aa55bb",
+//     text: "Why is the chat moving upwards?"
+//   },
+//   {
+//     type: "message",
+//     text: "ikr"
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Based and redpilled"
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+//   {
+//     type: "message",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+//   {
+//     type: "message",
+//     name: "Big Chungus",
+//     color: "#11ddcc",
+//     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//   },
+// ];
+
 /*
   TODO: WebSocket stuff
-  - Load initial users
-  - Load initial messages
+  - Load list of users
   - Load new user
     - Don't let it be the same as self user
   - Load new message
@@ -24,6 +84,7 @@ const ChatPage = () => {
 
   const [name, setName] = useState(null);
   const [color, setColor] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
   const [selfUser, setSelfUser] = useState(null);
   const [otherUsers, setOtherUsers] = useState([]);
   const [chatEvents, setChatEvents] = useState([]);
@@ -33,7 +94,13 @@ const ChatPage = () => {
     Helper functions
   */
 
-  const handleChangeName = (event) => {
+  const handleChangeNewMessage = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    setNewMessage(event.target.value);
+  };
+
+  const handleChangeName = event => {
     event.preventDefault();
     event.stopPropagation();
     setName(event.target.value);
@@ -79,67 +146,6 @@ const ChatPage = () => {
   */
 
   const getChatView = () => {
-    const chatEvents = [
-      {
-        type: "announcement",
-        text: "You joined the chat."
-      },
-      {
-        type: "message",
-        text: "idk man"
-      },
-      {
-        type: "message",
-        name: "Luigi",
-        color: "#aa55bb",
-        text: "Why is the chat moving upwards?"
-      },
-      {
-        type: "message",
-        text: "ikr"
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Based and redpilled"
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-      {
-        type: "message",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-      {
-        type: "message",
-        name: "Big Chungus",
-        color: "#11ddcc",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      },
-    ];
-
     const chatMembers = Array.from(otherUsers);
     if (selfUser) {
       chatMembers.push({
@@ -156,7 +162,7 @@ const ChatPage = () => {
           <div className="flex-container">
             <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
             <ChatEvents data={chatEvents} />
-            <ChatMessageCompose />
+            <ChatMessageCompose message={newMessage} handleChangeMessage={handleChangeNewMessage} />
           </div>
         </div>
         <div className="member-list-container">
