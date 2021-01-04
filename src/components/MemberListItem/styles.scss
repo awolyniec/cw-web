@@ -1,12 +1,8 @@
 .member-list-item {
-  line-height: 100%;
-  height: 100%;
-
-  b {
-    vertical-align: middle;
-    display: inline-block;
-    line-height: normal;
-  }
+  width: 50%;
+  margin: auto;
+  display: flex;
+  align-items: center;
 
   /* TODO: make styles for colored circles more generic */
   .color-circle {

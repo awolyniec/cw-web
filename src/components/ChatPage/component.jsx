@@ -72,7 +72,7 @@ const ChatPage = () => {
     ];
 
     const chatMembers = [
-      { name: "John Cena", color: "red" },
+      { name: "John Cena", color: "red", isSelf: true },
       { name: "Luigi", color: "#aa55bb" },
       { name: "Big Chungus", color: "#11ddcc" }
     ];
