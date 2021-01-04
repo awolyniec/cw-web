@@ -7,7 +7,6 @@ import { MemberList } from '../MemberList';
 
 import './styles.scss';
 
-
 /*
   TODO: WebSocket stuff
   - Load initial users
@@ -18,6 +17,8 @@ import './styles.scss';
   - Remove user
   - Sign in
   - Sign out
+  - Restart (the back-end will have an in-memory data store for now; if it crashes, the user list will be lost)
+    - Reset name, color, self user, other users, chat events, and sign-in errors
 */
 const ChatPage = () => {
 
