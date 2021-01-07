@@ -10,7 +10,7 @@ class WebSocketService {
   ) {
     this.webSocket = new WebSocket("ws://localhost:8080"); // TODO: add prod URLs
     this.webSocket.onopen = function() {
-      this.webSocket.onmessage = onMessageCb;
+      this.webSocket.onmessage = onMessageCb; // TODO: this should be a large helper function inside ChatPage
       this.webSocket.onerror = onErrorCb;
       this.webSocket.onClose = onCloseCb;
       onOpenCb();
@@ -28,7 +28,7 @@ class WebSocketService {
     this.webSocket.send(message);
   }
 
-  close(code = 1000) {
+  close(code = 1000) { // defaults to normal exit
     this.ensureWebSocketOpen();
     this.webSocket.close(code);
   }
