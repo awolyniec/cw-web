@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 
 import userReducer from './users/reducer';
-import eventReducer from './events/reducer';
+import chatEventReducer from './chatevents/reducer';
+import webSocketReducer from './websockets/reducer';
 
 export default combineReducers({
   users: userReducer,
-  events: eventReducer
+  chatEvents: chatEventReducer,
+  websockets: webSocketReducer
 });

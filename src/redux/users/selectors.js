@@ -7,6 +7,11 @@ export const selectSelfUser = createSelector(
   users => users.self
 );
 
+export const selectRequestedSelfUser = createSelector(
+  [selectUsersState],
+  users => users.requestedSelf
+);
+
 export const selectOtherUsers = createSelector(
   [selectUsersState],
   users => users.others

@@ -1,7 +1,10 @@
 const _ = require('lodash');
 
-// TODO: not yet tested
 class WebSocketService {
+  constructor() {
+    this.webSocket = null;
+  }
+
   open(
     onOpenCb = () => {},
     onMessageCb = () => {},
@@ -9,10 +12,10 @@ class WebSocketService {
     onCloseCb = () => {},
   ) {
     this.webSocket = new WebSocket("ws://localhost:8080"); // TODO: add prod URLs
-    this.webSocket.onopen = function() {
-      this.webSocket.onmessage = onMessageCb; // TODO: this should be a large helper function inside ChatPage
+    this.webSocket.onopen = () => {
+      this.webSocket.onmessage = onMessageCb;
       this.webSocket.onerror = onErrorCb;
-      this.webSocket.onClose = onCloseCb;
+      this.webSocket.onclose = onCloseCb;
       onOpenCb();
     };
   }
@@ -32,8 +35,11 @@ class WebSocketService {
     this.ensureWebSocketOpen();
     this.webSocket.close(code);
   }
+
+  getReadyState() {
+    return _.get(this.webSocket, "readyState");
+  }
 }
 
 const instance = new WebSocketService();
-Object.freeze(instance);
 module.exports = instance;

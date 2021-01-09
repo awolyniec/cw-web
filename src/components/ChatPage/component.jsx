@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { CirclePicker } from 'react-color';
 
+import * as websocketActions from '../../redux/websockets/actions';
+import * as userActions from '../../redux/users/actions';
+import * as userSelectors from '../../redux/users/selectors';
 import { ChatEvents } from '../ChatEvents';
 import { ChatMessageCompose } from '../ChatMessageCompose';
 import { MemberList } from '../MemberList';
@@ -8,6 +12,7 @@ import { MemberList } from '../MemberList';
 import './styles.scss';
 
 const ChatPage = () => {
+  const dispatch = useDispatch();
 
   const [name, setName] = useState(null);
   const [color, setColor] = useState(null);
@@ -16,6 +21,7 @@ const ChatPage = () => {
   const [otherUsers, setOtherUsers] = useState([]);
   const [chatEvents, setChatEvents] = useState([]);
   const [signInErrors, setSignInErrors] = useState([]);
+  const requestedSelfUser = useSelector(userSelectors.selectRequestedSelfUser);
 
   /*
     Helper functions
@@ -44,14 +50,9 @@ const ChatPage = () => {
     if (!name) {
       errors.push("Please select a name.");
     }
-    const otherUserNames = otherUsers.map(({ name }) => name);
-    if (otherUserNames.indexOf(name) > -1) {
-      errors.push("Name already taken.");
-    }
     if (!color) {
       errors.push("Please select a color.");
     }
-
     return { validity: !errors.length, errors };
   };
 
@@ -63,9 +64,9 @@ const ChatPage = () => {
     }
     setSignInErrors([]);
 
-    // TODO: publish new user event
-    // TODO: only set self user once user created on server
-    setSelfUser({ name, color });
+    const user = { name, color };
+    dispatch(userActions.setRequestedSelfUser(user));
+    dispatch(websocketActions.connectAndEnterChat(user));
   };
 
   /*
@@ -123,6 +124,7 @@ const ChatPage = () => {
               className="chat-enter-button"
               type="button"
               onClick={signIn}
+              disabled={requestedSelfUser}
             >
               Enter Chat
             </button>
