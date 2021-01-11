@@ -26,7 +26,6 @@ function* handleUserEnterChat(messageJSON) {
   const { data } = messageJSON;
   const { name } = data;
   const reduxState = store.getState();
-  console.log(JSON.stringify(reduxState));
   if (_.get(reduxState, "users.requestedSelf.name") === name) {
     resetChat();
     store.dispatch(userActions.setSelfUser(data));
@@ -37,13 +36,23 @@ function* handleUserEnterChat(messageJSON) {
   yield;
 }
 
+// TODO: make this not a generator function
+function* handleInitialSlateOfOtherUsers(messageJSON) {
+  const { data } = messageJSON;
+  for (let user of data) {
+    store.dispatch(userActions.addOtherUser(user));
+  }
+  yield;
+}
+
 export function* receiveMessageAsync({ payload: message }) {
   try {
     const messageJSON = JSON.parse(message);
     const { type } = messageJSON;
-    console.log("message: ", message);
     if (type === 'userEnterChat') {
       yield handleUserEnterChat(messageJSON);
+    } else if (type === 'initialSlateOfOtherUsers') {
+      yield handleInitialSlateOfOtherUsers(messageJSON);
     }
     yield;
   } catch(error) {
