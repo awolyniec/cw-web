@@ -1,7 +1,8 @@
 import types from './types';
 
 const INITIAL_STATE = {
-  allEvents: []
+  allEvents: [],
+  messagesStillSending: [],
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -10,12 +11,26 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         allEvents: action.payload
-      }
+      };
     case types.ADD_CHAT_EVENT:
       return {
         ...state,
         allEvents: state.allEvents.concat([action.payload])
+      };
+    case types.ADD_MESSAGE_STILL_SENDING:
+      return {
+        ...state,
+        messagesStillSending: state.messagesStillSending.concat([action.payload])
+      };
+    case types.REMOVE_MESSAGE_STILL_SENDING:
+      const messageToRemoveIndex = state.messagesStillSending.findIndex(({ sentAt }) => sentAt.valueOf() === action.payload.valueOf());
+      if (messageToRemoveIndex < 0) {
+        return state;
       }
+      return {
+        ...state,
+        messagesStillSending: Array.from(state.messagesStillSending).splice(messageToRemoveIndex, 1)
+      };
     default:
       return state;
   }

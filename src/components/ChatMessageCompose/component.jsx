@@ -2,7 +2,9 @@ import React from 'react';
 
 import './styles.scss';
 
-const ChatMessageCompose = ({ message = "", handleChangeMessage, sendMessage = () => {} }) => {
+const ChatMessageCompose = ({
+  message = "", handleChangeMessage, sendMessage = () => {}, sendButtonDisabled
+ }) => {
   const handleKeypress = e => {
     if(e.which === 13 && !e.shiftKey) {        
         sendMessage();
@@ -10,6 +12,7 @@ const ChatMessageCompose = ({ message = "", handleChangeMessage, sendMessage = (
     }
 }
 
+  // TODO: remove trailing whitespace from messages
   return (
     <div className="chat-message-compose">
       <textarea
@@ -22,6 +25,7 @@ const ChatMessageCompose = ({ message = "", handleChangeMessage, sendMessage = (
         className="send-button"
         type="button"
         onClick={sendMessage}
+        disabled={sendButtonDisabled}
       >
         Send
       </button>

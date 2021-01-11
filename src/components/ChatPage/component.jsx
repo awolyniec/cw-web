@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CirclePicker } from 'react-color';
 
+import * as chatEventActions from '../../redux/chatevents/actions';
 import * as websocketActions from '../../redux/websockets/actions';
 import * as userActions from '../../redux/users/actions';
 import * as userSelectors from '../../redux/users/selectors';
@@ -19,11 +20,14 @@ const ChatPage = () => {
   const [color, setColor] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [signInErrors, setSignInErrors] = useState([]);
+  const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
 
   const requestedSelfUser = useSelector(userSelectors.selectRequestedSelfUser);
   const selfUser = useSelector(userSelectors.selectSelfUser);
   const otherUsers = useSelector(userSelectors.selectOtherUsers);
   const chatEvents = useSelector(chatEventSelectors.selectAllEvents);
+  const messagesStillSending = useSelector(chatEventSelectors.selectMessagesStillSending);
+  const userToColor = useSelector(userSelectors.selectUserToColor);
 
   /*
     Helper functions
@@ -69,6 +73,46 @@ const ChatPage = () => {
     const user = { name, color };
     dispatch(userActions.setRequestedSelfUser(user));
     dispatch(websocketActions.connectAndEnterChat(user));
+    // TODO: remove name/color?
+  };
+
+  const sendMessage = () => {
+    setSendButtonDisabled(true);
+    const message = {
+      type: 'message',
+      data: {
+        user: selfUser.name,
+        text: newMessage,
+        sentAt: new Date()
+      }
+    };
+    dispatch(chatEventActions.addMessageStillSending(message));
+    dispatch(websocketActions.sendMessage(JSON.stringify(message)));
+    setNewMessage("");
+    setSendButtonDisabled(false);
+  };
+
+  const getFormattedChatEvent = (chatEvent, isStillSending) => {
+    const { type, data } = chatEvent;
+    switch (type) {
+      case 'userEnterChat':
+        const { name } = data;
+        return {
+          type: 'announcement',
+          text: `${name === selfUser.name ? 'You' : name} entered the chat.`,
+        };
+      case 'message':
+        const { user, text } = data;
+        return {
+          type: 'message',
+          name: user === selfUser.name ? "" : user,
+          text,
+          color: userToColor[user],
+          isSending: isStillSending
+        };
+      default:
+        return chatEvent;
+    }
   };
 
   /*
@@ -84,22 +128,13 @@ const ChatPage = () => {
       });
     }
 
-    const formattedChatEvents = chatEvents.map((chatEvent) => {
-      const { type, data } = chatEvent;
-      const getFormattedEvent = () => {
-        switch (type) {
-          case 'userEnterChat':
-            const { name } = data;
-            return {
-              type : 'announcement',
-              text : `${name === selfUser.name ? 'You' : name} entered the chat.`,
-            };
-          default:
-            return chatEvent;
-        }
-      };
-      return getFormattedEvent();
-    });
+    const formattedChatEvents = chatEvents
+      .map((chatEvent) => {
+        return getFormattedChatEvent(chatEvent);
+      })
+      .concat(messagesStillSending.map((message) => {
+        return getFormattedChatEvent(message, true);
+      }));
 
     const memberOrMembersText = chatMembers.length === 1 ? '' : 's';
 
@@ -109,7 +144,12 @@ const ChatPage = () => {
           <div className="flex-container">
             <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
             <ChatEvents data={formattedChatEvents} />
-            <ChatMessageCompose message={newMessage} handleChangeMessage={handleChangeNewMessage} />
+            <ChatMessageCompose
+              message={newMessage}
+              sendMessage={sendMessage}
+              handleChangeMessage={handleChangeNewMessage}
+              sendButtonDisabled={sendButtonDisabled}
+            />
           </div>
         </div>
         <div className="member-list-container">

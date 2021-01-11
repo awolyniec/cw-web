@@ -3,7 +3,8 @@ import classname from 'classnames';
 
 import "./styles.scss";
 
-const Message = ({ name, color, text }) => {
+// TODO: verify format of "is sending"
+const Message = ({ name, color, text, isSending }) => {
   return (
     <div className="message">
       {name && (
@@ -20,6 +21,11 @@ const Message = ({ name, color, text }) => {
         <div className={classname("message-text-container",  { "other-party": name })}>
           <span className="message-text">{text}</span>
         </div>
+        {isSending && (
+          <div className="sending-message secondary-text">
+            <span>Sending...</span>
+          </div>
+        )}
       </div>
     </div>
   );

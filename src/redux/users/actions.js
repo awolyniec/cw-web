@@ -24,3 +24,8 @@ export const setRequestedSelfUser = user => ({
   type: types.SET_REQUESTED_SELF_USER,
   payload: user
 });
+
+export const addUserColor = data => ({
+  type: types.ADD_USER_COLOR,
+  payload: data
+});

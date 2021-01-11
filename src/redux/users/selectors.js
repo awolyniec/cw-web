@@ -16,3 +16,8 @@ export const selectOtherUsers = createSelector(
   [selectUsersState],
   users => users.others
 );
+
+export const selectUserToColor = createSelector(
+  [selectUsersState],
+  users => users.userToColor
+);

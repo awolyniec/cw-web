@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { all, call, takeLatest, put } from 'redux-saga/effects';
+import { all, call, takeLatest } from 'redux-saga/effects';
 
 import webSocketService from '../../websockets';
 import types from './types';
@@ -22,9 +22,13 @@ export function* onSendMessage() {
   yield takeLatest(types.SEND_MESSAGE, sendMessageAsync);
 }
 
+/*
+  handlers for specific message types
+*/
+
 function* handleUserEnterChat(messageJSON) {
   const { data } = messageJSON;
-  const { name } = data;
+  const { name, color } = data;
   const reduxState = store.getState();
   if (_.get(reduxState, "users.requestedSelf.name") === name) {
     resetChat();
@@ -33,6 +37,7 @@ function* handleUserEnterChat(messageJSON) {
     store.dispatch(userActions.addOtherUser(data));
   }
   store.dispatch(chatEventActions.addChatEvent(messageJSON));
+  store.dispatch(userActions.addUserColor({ name, color }));
   yield;
 }
 
@@ -40,11 +45,30 @@ function* handleUserEnterChat(messageJSON) {
 function* handleInitialSlateOfOtherUsers(messageJSON) {
   const { data } = messageJSON;
   for (let user of data) {
+    const { name, color } = user;
     store.dispatch(userActions.addOtherUser(user));
+    store.dispatch(userActions.addUserColor({ name, color }));
   }
   yield;
 }
 
+function* handleChatMessage(messageJSON) {
+  const { data } = messageJSON;
+  const { user, sentAt } = data;
+
+  // TODO: can I use selectors here?
+  const reduxState = store.getState();
+  const selfUserName = _.get(reduxState, "users.self.name");
+
+  store.dispatch(chatEventActions.addChatEvent(messageJSON));
+  const isSelfMessage = user === selfUserName;
+  if (isSelfMessage) {
+    store.dispatch(chatEventActions.removeMessageStillSending(sentAt));
+  }
+  yield;
+}
+
+// TODO: if receiving a message, check to see if it's a self message. If it's a self message, remove it from pending
 export function* receiveMessageAsync({ payload: message }) {
   try {
     const messageJSON = JSON.parse(message);
@@ -53,6 +77,8 @@ export function* receiveMessageAsync({ payload: message }) {
       yield handleUserEnterChat(messageJSON);
     } else if (type === 'initialSlateOfOtherUsers') {
       yield handleInitialSlateOfOtherUsers(messageJSON);
+    } else if (type === 'message') {
+      yield handleChatMessage(messageJSON);
     }
     yield;
   } catch(error) {
