@@ -6,6 +6,6 @@ import webSocketReducer from './websockets/reducer';
 
 export default combineReducers({
   users: userReducer,
-  chatEvents: chatEventReducer,
+  chatevents: chatEventReducer,
   websockets: webSocketReducer
 });

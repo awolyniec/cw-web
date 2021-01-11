@@ -5,6 +5,7 @@ import { CirclePicker } from 'react-color';
 import * as websocketActions from '../../redux/websockets/actions';
 import * as userActions from '../../redux/users/actions';
 import * as userSelectors from '../../redux/users/selectors';
+import * as chatEventSelectors from '../../redux/chatevents/selectors';
 import { ChatEvents } from '../ChatEvents';
 import { ChatMessageCompose } from '../ChatMessageCompose';
 import { MemberList } from '../MemberList';
@@ -17,11 +18,12 @@ const ChatPage = () => {
   const [name, setName] = useState(null);
   const [color, setColor] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-  const [selfUser, setSelfUser] = useState(null);
-  const [otherUsers, setOtherUsers] = useState([]);
-  const [chatEvents, setChatEvents] = useState([]);
   const [signInErrors, setSignInErrors] = useState([]);
+
   const requestedSelfUser = useSelector(userSelectors.selectRequestedSelfUser);
+  const selfUser = useSelector(userSelectors.selectSelfUser);
+  const otherUsers = useSelector(userSelectors.selectOtherUsers);
+  const chatEvents = useSelector(chatEventSelectors.selectAllEvents);
 
   /*
     Helper functions
@@ -82,6 +84,23 @@ const ChatPage = () => {
       });
     }
 
+    const formattedChatEvents = chatEvents.map((chatEvent) => {
+      const { type, data } = chatEvent;
+      const getFormattedEvent = () => {
+        switch (type) {
+          case 'userEnterChat':
+            const { name } = data;
+            return {
+              type : 'announcement',
+              text : `${name === selfUser.name ? 'You' : name} entered the chat.`,
+            };
+          default:
+            return chatEvent;
+        }
+      };
+      return getFormattedEvent();
+    });
+
     const memberOrMembersText = chatMembers.length === 1 ? '' : 's';
 
     return (
@@ -89,7 +108,7 @@ const ChatPage = () => {
         <div className="chat-section-container">
           <div className="flex-container">
             <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
-            <ChatEvents data={chatEvents} />
+            <ChatEvents data={formattedChatEvents} />
             <ChatMessageCompose message={newMessage} handleChangeMessage={handleChangeNewMessage} />
           </div>
         </div>
