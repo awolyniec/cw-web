@@ -15,7 +15,7 @@ export const addMessageStillSending = chatEvent => ({
   payload: chatEvent
 });
 
-export const removeMessageStillSending = chatEvent => ({
+export const removeMessageStillSending = messageSentAt => ({
   type: types.REMOVE_MESSAGE_STILL_SENDING,
-  payload: chatEvent
+  payload: messageSentAt
 });

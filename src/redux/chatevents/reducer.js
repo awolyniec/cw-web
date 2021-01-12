@@ -23,13 +23,17 @@ const reducer = (state = INITIAL_STATE, action) => {
         messagesStillSending: state.messagesStillSending.concat([action.payload])
       };
     case types.REMOVE_MESSAGE_STILL_SENDING:
-      const messageToRemoveIndex = state.messagesStillSending.findIndex(({ sentAt }) => sentAt.valueOf() === action.payload.valueOf());
+      const messageToRemoveIndex = state.messagesStillSending.findIndex(
+        ({ data: { sentAt } }) => sentAt.valueOf() === action.payload.valueOf()
+      );
       if (messageToRemoveIndex < 0) {
         return state;
       }
+      const newMessagesStillSending = Array.from(state.messagesStillSending);
+      newMessagesStillSending.splice(messageToRemoveIndex, 1);
       return {
         ...state,
-        messagesStillSending: Array.from(state.messagesStillSending).splice(messageToRemoveIndex, 1)
+        messagesStillSending: newMessagesStillSending
       };
     default:
       return state;

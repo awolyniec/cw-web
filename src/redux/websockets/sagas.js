@@ -63,7 +63,7 @@ function* handleChatMessage(messageJSON) {
   store.dispatch(chatEventActions.addChatEvent(messageJSON));
   const isSelfMessage = user === selfUserName;
   if (isSelfMessage) {
-    store.dispatch(chatEventActions.removeMessageStillSending(sentAt));
+    store.dispatch(chatEventActions.removeMessageStillSending(new Date(sentAt)));
   }
   yield;
 }
