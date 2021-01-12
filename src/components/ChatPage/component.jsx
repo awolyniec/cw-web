@@ -63,6 +63,7 @@ const ChatPage = () => {
   };
 
   const signIn = () => {
+    setName(name.trim());
     const { validity, errors } = validateSignInInfo();
     if (!validity) {
       setSignInErrors(errors);
@@ -77,12 +78,17 @@ const ChatPage = () => {
   };
 
   const sendMessage = () => {
+    const trimmedMessage = newMessage.trim();
+    if (!trimmedMessage) {
+      return;
+    }
+
     setSendButtonDisabled(true);
     const message = {
       type: 'message',
       data: {
         user: selfUser.name,
-        text: newMessage,
+        text: trimmedMessage,
         sentAt: new Date()
       }
     };

@@ -5,6 +5,7 @@
   align-items: stretch;
 
   .message-text-container {
+    display: inline;
     border-radius: 10px;
     padding: 5px;
     background-color: $facebook-blue;
