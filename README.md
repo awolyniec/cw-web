@@ -3,15 +3,13 @@
 ### Description
 A single-room text chat app built with WebSockets. Pick a name, a color, and chat with other people in the room.
 
-### How to run
-
-Other services needed:
+### Other services you need to run
 - cw-server 
 
-How to run cw-web:
+### How to run
 
 You should have Node 12, npm 6, and yarn 1 installed (other versions not tested).
 
 Run these commands:
-```yarn install```
+```yarn install```  
 ```yarn start```
