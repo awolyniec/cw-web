@@ -67,6 +67,18 @@
       height: 100%;
       display: flex;
       flex-direction: column;  
+      justify-content: space-between;
+    }
+
+    .chat-name-and-events-flex-container {
+      height: calc(100% - 100px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-message-compose-container {
+      height: 100px;
+      box-sizing: border-box;
     }
 
     h1 {

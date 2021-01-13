@@ -152,14 +152,18 @@ const ChatPage = () => {
       <div className="chat-view">
         <div className="chat-section-container">
           <div className="flex-container">
-            <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
-            <ChatEvents data={formattedChatEvents} />
-            <ChatMessageCompose
-              message={newMessage}
-              sendMessage={sendMessage}
-              handleChangeMessage={handleChangeNewMessage}
-              sendButtonDisabled={sendButtonDisabled}
-            />
+            <div className="chat-name-and-events-flex-container">
+              <h1>Chat - {chatMembers.length} member{memberOrMembersText}</h1>
+              <ChatEvents data={formattedChatEvents} />
+            </div>
+            <div className="chat-message-compose-container">
+              <ChatMessageCompose
+                message={newMessage}
+                sendMessage={sendMessage}
+                handleChangeMessage={handleChangeNewMessage}
+                sendButtonDisabled={sendButtonDisabled}
+              />
+            </div>
           </div>
         </div>
         <div className="member-list-container">
