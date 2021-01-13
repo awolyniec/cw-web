@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CirclePicker } from 'react-color';
 
+import webSocketService from '../../websockets';
 import * as chatEventActions from '../../redux/chatevents/actions';
 import * as websocketActions from '../../redux/websockets/actions';
 import * as userActions from '../../redux/users/actions';
@@ -23,6 +24,12 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [signInClientErrors, setSignInClientErrors] = useState([]);
   const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      webSocketService.close();
+    };
+  }, []);
 
   const requestedSelfUser = useSelector(userSelectors.selectRequestedSelfUser);
   const selfUser = useSelector(userSelectors.selectSelfUser);

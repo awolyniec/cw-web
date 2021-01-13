@@ -34,6 +34,7 @@ class WebSocketService {
   close(code = 1000) { // defaults to normal exit
     this.ensureWebSocketOpen();
     this.webSocket.close(code);
+    this.webSocket = null;
   }
 
   getReadyState() {

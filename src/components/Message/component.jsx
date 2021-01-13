@@ -3,7 +3,6 @@ import classname from 'classnames';
 
 import "./styles.scss";
 
-// TODO: verify format of "is sending"
 const Message = ({ name, color, text, isSending }) => {
   return (
     <div className="message">
