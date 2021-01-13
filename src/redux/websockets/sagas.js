@@ -6,6 +6,7 @@ import types from './types';
 import * as actions from './actions';
 import * as userActions from '../users/actions';
 import * as chatEventActions from '../chatevents/actions';
+import * as signInActions from '../signin/actions';
 import store from '../store';
 import { resetChat } from '../helpers';
 
@@ -68,6 +69,16 @@ function* handleChatMessage(messageJSON) {
   yield;
 }
 
+function* handleError(messageJSON) {
+  const { data } = messageJSON;
+  const { type, message } = data;
+  if (type === 'signInFailed') {
+    store.dispatch(signInActions.setSignInError(message));
+    store.dispatch(userActions.setRequestedSelfUser(null));
+  }
+  yield;
+}
+
 // TODO: if receiving a message, check to see if it's a self message. If it's a self message, remove it from pending
 export function* receiveMessageAsync({ payload: message }) {
   try {
@@ -79,6 +90,8 @@ export function* receiveMessageAsync({ payload: message }) {
       yield handleInitialSlateOfOtherUsers(messageJSON);
     } else if (type === 'message') {
       yield handleChatMessage(messageJSON);
+    } else if (type === 'error') {
+      yield handleError(messageJSON);
     }
     yield;
   } catch(error) {

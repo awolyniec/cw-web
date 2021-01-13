@@ -11,6 +11,11 @@
   }
 
   .sign-in-view {
+    .error-div {
+      text-align: center;
+      margin-top: 1rem;
+      color: red;
+    }
 
     .circle-picker-container {
       width: 100%;
@@ -43,6 +48,10 @@
       width: 100%;
       height: 1.5rem;
       box-sizing: border-box;
+    }
+
+    .chat-enter-button-sibling {
+      clear: both;
     }
 
     .chat-enter-button {

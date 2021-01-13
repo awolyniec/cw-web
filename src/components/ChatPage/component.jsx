@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CirclePicker } from 'react-color';
 
 import * as chatEventActions from '../../redux/chatevents/actions';
 import * as websocketActions from '../../redux/websockets/actions';
 import * as userActions from '../../redux/users/actions';
+import * as signInActions from '../../redux/signin/actions';
 import * as userSelectors from '../../redux/users/selectors';
 import * as chatEventSelectors from '../../redux/chatevents/selectors';
+import * as signInSelectors from '../../redux/signin/selectors';
 import { ChatEvents } from '../ChatEvents';
 import { ChatMessageCompose } from '../ChatMessageCompose';
 import { MemberList } from '../MemberList';
@@ -19,7 +21,7 @@ const ChatPage = () => {
   const [name, setName] = useState(null);
   const [color, setColor] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-  const [signInErrors, setSignInErrors] = useState([]);
+  const [signInClientErrors, setSignInClientErrors] = useState([]);
   const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
 
   const requestedSelfUser = useSelector(userSelectors.selectRequestedSelfUser);
@@ -28,6 +30,7 @@ const ChatPage = () => {
   const chatEvents = useSelector(chatEventSelectors.selectAllEvents);
   const messagesStillSending = useSelector(chatEventSelectors.selectMessagesStillSending);
   const userToColor = useSelector(userSelectors.selectUserToColor);
+  const signInServerError = useSelector(signInSelectors.selectSignInError);
 
   /*
     Helper functions
@@ -66,14 +69,15 @@ const ChatPage = () => {
     setName(name.trim());
     const { validity, errors } = validateSignInInfo();
     if (!validity) {
-      setSignInErrors(errors);
+      setSignInClientErrors(errors);
       return;
     }
-    setSignInErrors([]);
+    setSignInClientErrors([]);
 
     const user = { name, color };
     dispatch(userActions.setRequestedSelfUser(user));
     dispatch(websocketActions.connectAndEnterChat(user));
+    dispatch(signInActions.setSignInError(null));
     // TODO: remove name/color?
   };
 
@@ -193,9 +197,10 @@ const ChatPage = () => {
             >
               Enter Chat
             </button>
+            <div className="chat-enter-button-sibling" />
           </div>
-          {signInErrors.length ? (
-            signInErrors.map((errorMessage, index) => {
+          {signInClientErrors.length ? (
+            signInClientErrors.map((errorMessage, index) => {
               return (
                 <div key={`error-${index}`}>
                   <span style={{ color: "red" }}>{errorMessage}</span>
@@ -204,6 +209,11 @@ const ChatPage = () => {
             })
           ) : (<></>)}
         </div>
+        {signInServerError && (
+          <div className="error-div">
+            {signInServerError}
+          </div>
+        )}
       </div>
     );
   };
