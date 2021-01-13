@@ -79,6 +79,14 @@ function* handleError(messageJSON) {
   yield;
 }
 
+function* handleUserLeaveChat(messageJSON) {
+  const { data } = messageJSON;
+  const { name } = data;
+  store.dispatch(userActions.removeOtherUser(name));
+  store.dispatch(chatEventActions.addChatEvent(messageJSON));
+  yield;
+}
+
 // TODO: if receiving a message, check to see if it's a self message. If it's a self message, remove it from pending
 export function* receiveMessageAsync({ payload: message }) {
   try {
@@ -92,6 +100,8 @@ export function* receiveMessageAsync({ payload: message }) {
       yield handleChatMessage(messageJSON);
     } else if (type === 'error') {
       yield handleError(messageJSON);
+    } else if (type === 'userLeaveChat') {
+      yield handleUserLeaveChat(messageJSON);
     }
     yield;
   } catch(error) {

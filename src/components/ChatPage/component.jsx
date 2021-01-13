@@ -111,15 +111,19 @@ const ChatPage = () => {
 
   const getFormattedChatEvent = (chatEvent, isStillSending) => {
     const { type, data } = chatEvent;
+    const { name, user, text } = data;
     switch (type) {
       case 'userEnterChat':
-        const { name } = data;
         return {
           type: 'announcement',
           text: `${name === selfUser.name ? 'You' : name} entered the chat.`,
         };
+      case 'userLeaveChat':
+        return {
+          type: 'announcement',
+          text: `${name} left the chat.`,
+        };
       case 'message':
-        const { user, text } = data;
         return {
           type: 'message',
           name: user === selfUser.name ? "" : user,

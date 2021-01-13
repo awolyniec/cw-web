@@ -38,10 +38,12 @@ const reducer = (state = INITIAL_STATE, action) => {
         requestedSelf: action.payload
       };
     case types.REMOVE_OTHER_USER:
-      const otherUserIndex = state.others.findIndex(otherUser => otherUser.userName === action.payload);
+      const otherUserIndex = state.others.findIndex(otherUser => otherUser.name === action.payload);
+      const newOthers = Array.from(state.others);
+      newOthers.splice(otherUserIndex, 1);
       return {
         ...state,
-        others: Array.from(state.others).splice(otherUserIndex, 1)
+        others: newOthers
       };
     default:
       return state;
