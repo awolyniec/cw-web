@@ -60,7 +60,7 @@
   }
 
   .chat-section-container {
-    width: 66%;
+    width: 75%;
     height: 100%;
 
     .flex-container {
@@ -87,7 +87,8 @@
   }
 
   .member-list-container {
-    width: 33%;
+    width: 25%;
+    min-width: 200px;
     height: 100%;
   }
 }
