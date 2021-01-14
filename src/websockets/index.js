@@ -67,4 +67,4 @@ class WebSocketService {
 }
 
 const instance = new WebSocketService();
-module.exports = instance;
+export default instance;

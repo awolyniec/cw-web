@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { all, call, takeLatest } from 'redux-saga/effects';
 
-import * as webSocketService from '../../websockets';
+import webSocketService from '../../websockets';
 import types from './types';
 import * as actions from './actions';
 import * as userActions from '../users/actions';
