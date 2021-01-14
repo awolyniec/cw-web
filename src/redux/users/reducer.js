@@ -17,6 +17,11 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         userToColor
       };
+    case types.SET_USER_TO_COLOR:
+      return {
+        ...state,
+        userToColor: action.payload
+      };
     case types.SET_SELF_USER:
       return {
         ...state,

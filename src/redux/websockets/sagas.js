@@ -132,10 +132,19 @@ export function* connectAndEnterChatAsync({ payload: user }) {
       const onOpenCb = () => {
         store.dispatch(actions.sendMessage(userSignInMessage))
       };
-      const onMessageCb = (messageEvent) => {
+      const onMessageCb = messageEvent => {
         store.dispatch(actions.receiveMessage(messageEvent.data));
       };
-      yield webSocketService.open(onOpenCb, onMessageCb);
+      const onErrorCb = event => {
+        console.error('Websocket closed due to error: ', event);
+        store.dispatch(signInActions.setSignInError("An unexpected error occurred. Please sign in again."));
+        resetChat();
+      };
+      const handleConnectionUnexpectedlyNotOpen = () => {
+        store.dispatch(signInActions.setSignInError("An unexpected error occurred. Please sign in again."));
+        resetChat();
+      };
+      yield webSocketService.open(onOpenCb, onMessageCb, resetChat, onErrorCb, handleConnectionUnexpectedlyNotOpen);
     }
   } catch (error) {
     console.error(error);

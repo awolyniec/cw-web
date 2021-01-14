@@ -29,3 +29,8 @@ export const addUserColor = data => ({
   type: types.ADD_USER_COLOR,
   payload: data
 });
+
+export const setUserToColor = userToColor => ({
+  type: types.SET_USER_TO_COLOR,
+  payload: userToColor
+});
