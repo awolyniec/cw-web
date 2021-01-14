@@ -1,5 +1,4 @@
 const _ = require('lodash');
-
 class WebSocketService {
   constructor() {
     this.webSocket = null;
@@ -14,15 +13,16 @@ class WebSocketService {
   ) {
     this.webSocket = new WebSocket("ws://localhost:8080"); // TODO: add prod URLs
     this.handleConnectionUnexpectedlyNotOpen = handleConnectionUnexpectedlyNotOpen;
-    this.webSocket.onopen = () => {
+    this.webSocket.addEventListener('open', () => {
       this.webSocket.onmessage = onMessageCb;
       this.webSocket.onerror = onErrorCb;
-      this.webSocket.onclose = onCloseCb;
-      this.webSocket.addEventListener('ping', () => {
-        console.log('Ping received.');
+      this.webSocket.addEventListener('close', onCloseCb);
+      this.webSocket.addEventListener('close', function clear() {
+        clearTimeout(this.pingTimeout);
       });
       onOpenCb();
-    };
+    })
+    this.webSocket.addEventListener('open', this.heartbeat);
   }
 
   // run cb if websocket open; handle unexpected non-connection otherwise
@@ -49,6 +49,18 @@ class WebSocketService {
 
   getReadyState() {
     return _.get(this.webSocket, "readyState");
+  }
+
+  heartbeat = () => {
+    clearTimeout(this.pingTimeout);
+  
+    // Use `WebSocket#terminate()`, which immediately destroys the connection,
+    // instead of `WebSocket#close()`, which waits for the close timer.
+    // Delay should be equal to the interval at which your server
+    // sends out pings plus a conservative assumption of the latency.
+    this.pingTimeout = setTimeout(() => {
+      this.close(); // TODO: get proper exit code
+    }, 30000 + 1000);
   }
 }
 

@@ -102,6 +102,12 @@ export function* receiveMessageAsync({ payload: message }) {
       yield handleError(messageJSON);
     } else if (type === 'userLeaveChat') {
       yield handleUserLeaveChat(messageJSON);
+    } else if (type === 'ping') {
+      console.log('Received ping; cancelling timer...');
+      webSocketService.heartbeat();
+      store.dispatch(actions.sendMessage(JSON.stringify({
+        type: 'pong'
+      })));
     }
     yield;
   } catch(error) {
@@ -144,7 +150,9 @@ export function* connectAndEnterChatAsync({ payload: user }) {
         store.dispatch(signInActions.setSignInError("An unexpected error occurred. Please sign in again."));
         resetChat();
       };
-      yield webSocketService.open(onOpenCb, onMessageCb, resetChat, onErrorCb, handleConnectionUnexpectedlyNotOpen);
+      yield webSocketService.open(
+        onOpenCb, onMessageCb, resetChat, onErrorCb, handleConnectionUnexpectedlyNotOpen
+      );
     }
   } catch (error) {
     console.error(error);
