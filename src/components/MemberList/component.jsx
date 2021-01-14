@@ -9,7 +9,7 @@ const MemberList = ({ data = [] }) => {
     <div className="member-list">
       {data.map(member => {
         return (
-          <div className="member-entry-container">
+          <div className="member-entry-container" key={`member-${member.name}`}>
             {<MemberListItem { ...member } />}
           </div>
         );

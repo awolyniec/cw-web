@@ -40,9 +40,9 @@ const ChatEvents = ({ data = [] }) => {
 
   return (
     <div className="chat-events">
-      {data.map(({ type, ...rest }) => {
+      {data.map(({ type, ...rest }, index) => {
         return (
-          <div className="row">
+          <div className="row" key={`message-${index}`}>
             {type === "message" ? getMessageView(rest) : getAnnouncementView(rest)}
           </div>
         );

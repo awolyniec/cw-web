@@ -8,7 +8,7 @@ const Message = ({ name, color, text, isSending }) => {
     <div className="message">
       {name && (
         <div>
-          <div className="color-circle" style={{ "background-color": color }} />
+          <div className="color-circle" style={{ "backgroundColor": color }} />
         </div>
       )}
       <div>
