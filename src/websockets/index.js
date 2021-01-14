@@ -22,21 +22,26 @@ class WebSocketService {
     };
   }
 
-  ensureWebSocketOpen() {
-    if (_.get(this.webSocket, "readyState") !== 1) {
+  // run cb if websocket open; handle unexpected non-connection otherwise
+  ensureWebSocketOpen(ifOpenCb) {
+    if (_.get(this.webSocket, "readyState") === 1) {
+      ifOpenCb();
+    } else {
       this.handleConnectionUnexpectedlyNotOpen();
     }
   }
 
   send(message) {
-    this.ensureWebSocketOpen();
-    this.webSocket.send(message);
+    this.ensureWebSocketOpen(() => {
+      this.webSocket.send(message);
+    });
   }
 
   close(code = 1000) { // defaults to normal exit
-    this.ensureWebSocketOpen();
-    this.webSocket.close(code);
-    this.webSocket = null;
+    this.ensureWebSocketOpen(() => {
+      this.webSocket.close(code);
+      this.webSocket = null;
+    });
   }
 
   getReadyState() {
