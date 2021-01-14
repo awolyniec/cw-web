@@ -4,24 +4,10 @@ const INITIAL_STATE = {
   self: null,
   requestedSelf: null,
   others: [],
-  userToColor: {}
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.ADD_USER_COLOR:
-      const { name, color } = action.payload;
-      const userToColor = Object.assign({}, state.userToColor);
-      userToColor[name] = color;
-      return {
-        ...state,
-        userToColor
-      };
-    case types.SET_USER_TO_COLOR:
-      return {
-        ...state,
-        userToColor: action.payload
-      };
     case types.SET_SELF_USER:
       return {
         ...state,

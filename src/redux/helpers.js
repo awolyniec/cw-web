@@ -7,5 +7,4 @@ export function resetChat() {
   store.dispatch(userActions.setRequestedSelfUser(null));
   store.dispatch(userActions.setSelfUser(null));
   store.dispatch(chatEventActions.setChatEvents([]));
-  store.dispatch(userActions.setUserToColor({}));
 }

@@ -36,7 +36,6 @@ const ChatPage = () => {
   const otherUsers = useSelector(userSelectors.selectOtherUsers);
   const chatEvents = useSelector(chatEventSelectors.selectAllEvents);
   const messagesStillSending = useSelector(chatEventSelectors.selectMessagesStillSending);
-  const userToColor = useSelector(userSelectors.selectUserToColor);
   const signInServerError = useSelector(signInSelectors.selectSignInError);
 
   /*
