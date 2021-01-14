@@ -111,7 +111,7 @@ const ChatPage = () => {
 
   const getFormattedChatEvent = (chatEvent, isStillSending) => {
     const { type, data } = chatEvent;
-    const { name, user, text } = data;
+    const { name, color, user, text } = data;
     switch (type) {
       case 'userEnterChat':
         return {
@@ -128,7 +128,7 @@ const ChatPage = () => {
           type: 'message',
           name: user === selfUser.name ? "" : user,
           text,
-          color: userToColor[user],
+          color,
           isSending: isStillSending
         };
       default:
