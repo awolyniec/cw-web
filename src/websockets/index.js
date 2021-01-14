@@ -22,7 +22,7 @@ class WebSocketService {
       });
       onOpenCb();
     })
-    this.webSocket.addEventListener('open', this.heartbeat);
+    this.webSocket.addEventListener('open', this.heartbeat.bind(this));
   }
 
   // run cb if websocket open; handle unexpected non-connection otherwise
@@ -51,7 +51,7 @@ class WebSocketService {
     return _.get(this.webSocket, "readyState");
   }
 
-  heartbeat = () => {
+  heartbeat() {
     clearTimeout(this.pingTimeout);
   
     // Use `WebSocket#terminate()`, which immediately destroys the connection,
