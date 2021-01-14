@@ -9,7 +9,7 @@ const config = {
     backendUrl: 'ws://localhost:8080'
   },
   production: {
-    backendUrl: 'ws://chattywatty-api.herokuapp.com:80'
+    backendUrl: 'ws://chattywatty-api.herokuapp.com:8080'
   }
 };
 
