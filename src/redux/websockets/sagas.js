@@ -103,7 +103,6 @@ export function* receiveMessageAsync({ payload: message }) {
     } else if (type === 'userLeaveChat') {
       yield handleUserLeaveChat(messageJSON);
     } else if (type === 'ping') {
-      console.log('Received ping; cancelling timer...');
       webSocketService.heartbeat();
       store.dispatch(actions.sendMessage(JSON.stringify({
         type: 'pong'
