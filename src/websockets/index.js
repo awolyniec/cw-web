@@ -13,11 +13,14 @@ class WebSocketService {
     handleConnectionUnexpectedlyNotOpen = () => {},
   ) {
     this.webSocket = new WebSocket("ws://localhost:8080"); // TODO: add prod URLs
+    this.handleConnectionUnexpectedlyNotOpen = handleConnectionUnexpectedlyNotOpen;
     this.webSocket.onopen = () => {
       this.webSocket.onmessage = onMessageCb;
       this.webSocket.onerror = onErrorCb;
       this.webSocket.onclose = onCloseCb;
-      this.handleConnectionUnexpectedlyNotOpen = handleConnectionUnexpectedlyNotOpen;
+      this.webSocket.addEventListener('ping', () => {
+        console.log('Ping received.');
+      });
       onOpenCb();
     };
   }
