@@ -1,4 +1,6 @@
 const _ = require('lodash');
+
+const { backendUrl } = require('../config');
 class WebSocketService {
   constructor() {
     this.webSocket = null;
@@ -11,7 +13,7 @@ class WebSocketService {
     onCloseCb = () => {},
     handleConnectionUnexpectedlyNotOpen = () => {},
   ) {
-    this.webSocket = new WebSocket("ws://localhost:8080"); // TODO: add prod URLs
+    this.webSocket = new WebSocket(backendUrl);
     this.handleConnectionUnexpectedlyNotOpen = handleConnectionUnexpectedlyNotOpen;
     this.webSocket.addEventListener('open', () => {
       this.webSocket.onmessage = onMessageCb;
