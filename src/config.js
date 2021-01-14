@@ -1,8 +1,9 @@
 // TODO: this is lazy; put it on NPM
 const extend = require('extend');
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.REACT_APP_ENV || 'development';
 
+// TODO: add back-end port to global config
 const config = {
   base: {},
   development: {
